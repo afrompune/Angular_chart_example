@@ -29,6 +29,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Adding Charts dependency
   1) npm install --save chart.js
   2) npm install --save ng2-charts
-  3) Add in index.html
-        <script src="node_modules/chart.js/src/chart.js"></script>
-  4) 
