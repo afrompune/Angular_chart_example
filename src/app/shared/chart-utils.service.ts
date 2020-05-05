@@ -7,9 +7,11 @@ import { Chart } from 'node_modules/chart.js';
 })
 export class ChartUtilsService {
   dataIndex: Map<string, number> = new Map<string, number>();
+  itemsInChart = 25;
+
   constructor() { }
 
-  public updateChart(chartName: string,
+  public createChart(chartName: string,
     type: string,
     label: string,
     labels: string[],
@@ -37,6 +39,9 @@ export class ChartUtilsService {
               beginAtZero: true
             }
           }]
+        },
+        animation: {
+          duration: 2
         }
       }
     });
@@ -74,13 +79,16 @@ export class ChartUtilsService {
   }
 
   public getChartData(origData: number[], totalRequireItems: number) {
-    return this.getSampleData("data", [
-      1, 2, 3, 4, 5, 6],
+    let sampleData = [];
+
+    for (let i = 1; i <= this.itemsInChart; i++)
+      sampleData.push(Math.floor(Math.random() * this.itemsInChart) + 1);
+
+    return this.getSampleData("data", sampleData,
       origData,
       totalRequireItems);
   }
   public getSampleData(type: string, sampleData: any[], origData: any[], totalRequireItems: number) {
-    //const sampleData = [1, 2, 3, 4, 5, 6];
     let newData: any[] = [];
 
     if (origData) {
@@ -93,18 +101,14 @@ export class ChartUtilsService {
 
     let i = 0;
     while (i < totalRequireItems) {
-      console.log("Item # " + i + "Index : " + this.dataIndex);
-
       newData.push(sampleData[this.dataIndex[type]]);
       i++;
       this.dataIndex[type] = (this.dataIndex[type] + 1) % sampleData.length;
 
     }
 
-    console.log("getChartData : " + newData);
-    console.log("Keeping onwards from " + (newData.length - sampleData.length - 1));
-    if (newData.length > sampleData.length)
-      return newData.slice(newData.length - sampleData.length - 1);
+    if (newData.length > this.itemsInChart)
+      return newData.slice(newData.length - this.itemsInChart - 1);
     else
       return newData;
   }
@@ -113,8 +117,35 @@ export class ChartUtilsService {
     return "Temperatures";
   }
 
-  public getChartLabels() {
-    return ['2007', '2007', '2008', '2009', '2010', '2011'];
+  public getChartLabels(origData: string[], totalRequireItems: number) {
+
+    let sampleData: string[] = [];
+
+    if (!origData)
+      origData = sampleData;
+
+    let val1 = 0;
+    if (this.dataIndex['chartlabel']) {
+      console.log("Next Label Index : " + this.dataIndex['chartlabel']);
+      val1 = this.dataIndex['chartlabel'];
+    }
+    else {
+      this.dataIndex['chartlabel'] = 0;
+    }
+
+    let i = 0;
+    while (i < totalRequireItems) {
+      val1++;
+      origData.push("" + val1);
+      i++;
+    }
+
+    this.dataIndex['chartlabel'] = this.dataIndex['chartlabel'] + totalRequireItems;
+
+    if (origData.length > this.itemsInChart)
+      return origData.slice(origData.length - this.itemsInChart);
+    else
+      return origData;
   }
 
   public getChartType() {

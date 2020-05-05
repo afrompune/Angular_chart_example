@@ -1,1 +1,10 @@
-<p>pie-chart works!</p>
+<p></p>
+<p align="center"><strong>Pie Chart Example</strong></p><hr>
+<label for="duration">Update Duration (In Seconds) : </label> <input type="number" [(ngModel)]="duration" [disabled]="intervalId"> &nbsp; 
+&nbsp;<button class="btn btn-success" (click)="startUpdateChart()" [disabled]="intervalId">Start Update</button>&nbsp; 
+&nbsp;<button class="btn btn-danger" (click)="stopUpdateChart()" [disabled]="!intervalId">Stop Update</button>
+<br><br>
+
+<div class="chartDim">
+    <canvas id="myChart" width="100" height="50"></canvas>
+</div>
